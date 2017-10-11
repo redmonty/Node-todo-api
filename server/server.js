@@ -23,3 +23,7 @@ const ivan = new User({
 }).save().then((res) => console.log(JSON.stringify(res,undefined,2)), (err) => console.log(err));
 */
 app.listen(3000, () => console.log(`Server starting on port 3000`));
+
+module.exports = {
+    app
+};
