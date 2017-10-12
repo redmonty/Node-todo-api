@@ -4,7 +4,10 @@ const express = require('express'),
     {ObjectID} = require('mongodb');
 const {mongoose} = require('./db/mongoose'),
     {Todo} = require('./models/todo'),
-    {User} = require('./models/user');   
+    {User} = require('./models/user');  
+
+const port = process.env.PORT || 3000; //for heroku
+
 app.use(bodyParser.json());
 //Routes
 app.post('/todos', (req,res) => {//post to create new todo
@@ -47,7 +50,7 @@ const ivan = new User({
     email: 'putiareddevil@gmail.com'
 }).save().then((res) => console.log(JSON.stringify(res,undefined,2)), (err) => console.log(err));
 */
-app.listen(3000, () => console.log(`Server starting on port 3000`));
+app.listen(port, () => console.log(`Server starting on port ${port}`));
 
 module.exports = {
     app
