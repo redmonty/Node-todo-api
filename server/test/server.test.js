@@ -7,11 +7,13 @@ const {app} = require('./../server'),
 const todos = [
     {
         _id: new ObjectID(),
-        text: 'First text todo'
+        text: 'First text todo',
+        // completedAt: null
     },
     {
         _id: new ObjectID(),
-        text: 'Second text todo'
+        text: 'Second text todo',
+        // completedAt: null
     }
 ];
 
@@ -132,5 +134,36 @@ describe('DELETE /todos/:id', () => {
             .delete(`/todos/123abs`)
             .expect(404)
             .end(done);
+    });
+});
+describe('PATH /todos/:id', () => {
+    it('should update the todo', (done) => {
+        var hexId = todos[0]._id.toHexString(),
+            text = 'this should be a new text';
+        request(app)
+            .patch(`/todos/${hexId}`)
+            .send({completed: true, text})
+            .expect(200)
+            .expect(res => {
+                expect(res.body.todo.text).toBe(text);
+                expect(res.body.todo.completed).toBe(true);
+                expect(res.body.todo.completedAt).toBeA('number');
+            })
+            .end(done);
+
+    });
+    it('should clear completedAt when todo is not completed', (done) => {
+        var hexId = todos[1]._id.toHexString(),
+        text = 'this should be a new text!';
+    request(app)
+        .patch(`/todos/${hexId}`)
+        .send({completed: false, text})
+        .expect(200)
+        .expect(res => {
+            expect(res.body.todo.text).toBe(text);
+            expect(res.body.todo.completed).toBe(false);
+            expect(res.body.todo.completedAt).toNotExist();
+        })
+        .end(done);
     });
 });
