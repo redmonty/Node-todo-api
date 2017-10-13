@@ -44,6 +44,22 @@ app.get('/todos/:id', (req,res) => {
     }
 });
 
+app.delete('/todos/:id', (req,res) => {
+    var id = req.params.id;
+    if(!ObjectID.isValid(id)) {
+        console.log('ID isnt valid');
+        return res.status(404).send();
+    } else {
+        Todo.findByIdAndRemove(id).then((todo) => {
+            if(!todo) {
+                console.log('No todo with this id');
+                return res.status(404).send();
+            }
+            console.log(`Todo with id: ${id} was deleted`);
+        }).catch((err) => res.status(404).send());
+    }
+});
+
 /*
 const ivan = new User({
     name: 'Ivan',
@@ -56,3 +72,11 @@ module.exports = {
     app
 };
 //master
+/*
+heroku create
+heroku addons:create mongolab:sandbox
+heroku config   process.env.MONGODB_URI
+git push heroku master
+heroku logs
+heroku open
+*/ 
